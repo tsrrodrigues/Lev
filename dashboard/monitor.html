@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilita Factory - Monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .last-update {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .agent-card {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #333;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .agent-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+        }
+        
+        .agent-card.active {
+            border-color: #10b981;
+        }
+        
+        .agent-card.idle {
+            border-color: #fbbf24;
+        }
+        
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .agent-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-idle {
+            background: #fbbf24;
+            color: #1a1a2e;
+        }
+        
+        .current-task {
+            background: #2d2d44;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .task-id {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .stats-section {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-box {
+            background: #2d2d44;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-top: 5px;
+        }
+        
+        .alerts-section {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .alert-item {
+            background: #ef4444;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .no-alerts {
+            color: #10b981;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+        
+        .refresh-btn:hover {
+            background: #764ba2;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏭 Facilita Factory Monitor</h1>
+        <div class="last-update">Última atualização: <span id="lastUpdate">Carregando...</span></div>
+    </div>
+
+    <div id="content" class="loading">Carregando dados...</div>
+
+    <button class="refresh-btn" onclick="loadStatus()">🔄 Atualizar</button>
+
+    <script>
+        async function loadStatus() {
+            try {
+                const response = await fetch('../shared/status.json');
+                const data = await response.json();
+                renderDashboard(data);
+            } catch (error) {
+                document.getElementById('content').innerHTML = 
+                    '<div class="loading">❌ Erro ao carregar dados</div>';
+            }
+        }
+
+        function renderDashboard(data) {
+            const lastUpdate = new Date(data.lastUpdate).toLocaleString('pt-BR');
+            document.getElementById('lastUpdate').textContent = lastUpdate;
+
+            let html = '';
+
+            // Stats Section
+            html += `
+                <div class="stats-section">
+                    <h2>📊 Estatísticas</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">${data.tasks.active}</div>
+                            <div class="stat-label">Ativas</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">${data.tasks.backlog}</div>
+                            <div class="stat-label">Backlog</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">${data.tasks.done_today}</div>
+                            <div class="stat-label">Concluídas Hoje</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Agents Grid
+            html += '<div class="grid">';
+            for (const [id, agent] of Object.entries(data.agents)) {
+                const statusClass = agent.status === 'active' ? 'active' : 'idle';
+                const statusBadgeClass = agent.status === 'active' ? 'status-active' : 'status-idle';
+                const emoji = getAgentEmoji(id);
+                
+                html += `
+                    <div class="agent-card ${statusClass}">
+                        <div class="agent-header">
+                            <div class="agent-name">${emoji} ${id.toUpperCase()}</div>
+                            <span class="status-badge ${statusBadgeClass}">${agent.status}</span>
+                        </div>
+                        ${agent.currentTask ? `
+                            <div class="current-task">
+                                🔨 <span class="task-id">${agent.currentTask}</span>
+                            </div>
+                        ` : '<div style="color: #666;">Sem tarefa no momento</div>'}
+                    </div>
+                `;
+            }
+            html += '</div>';
+
+            // Alerts Section
+            html += `
+                <div class="alerts-section">
+                    <h2>🚨 Alertas</h2>
+                    ${data.alerts.length > 0 ? 
+                        data.alerts.map(alert => `<div class="alert-item">${alert}</div>`).join('') :
+                        '<div class="no-alerts">✅ Nenhum alerta no momento</div>'
+                    }
+                </div>
+            `;
+
+            document.getElementById('content').innerHTML = html;
+        }
+
+        function getAgentEmoji(id) {
+            const emojis = {
+                'pm': '📋',
+                'spec': '📝',
+                'dev-1': '💻',
+                'dev-2': '💻',
+                'support': '🆘'
+            };
+            return emojis[id] || '🤖';
+        }
+
+        // Auto-refresh every 10 seconds
+        setInterval(loadStatus, 10000);
+        
+        // Initial load
+        loadStatus();
+    </script>
+</body>
+</html>

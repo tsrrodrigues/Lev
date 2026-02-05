@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilita Factory Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #a0aec0;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .task-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 4px solid #667eea;
+        }
+        
+        .task-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .task-card.critical { border-left-color: #e74c3c; }
+        .task-card.high { border-left-color: #e67e22; }
+        .task-card.medium { border-left-color: #f39c12; }
+        .task-card.low { border-left-color: #95a5a6; }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .task-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            flex: 1;
+        }
+        
+        .task-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .badge.status {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+        
+        .badge.priority {
+            color: white;
+        }
+        
+        .task-meta {
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+        
+        .task-description {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .assignee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+        
+        .assignee-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .task-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .task-details.expanded {
+            display: block;
+        }
+        
+        .detail-section {
+            margin-bottom: 15px;
+        }
+        
+        .detail-section h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #a0aec0;
+            margin-bottom: 8px;
+        }
+        
+        .detail-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .detail-section li {
+            padding: 6px 0;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .detail-section li:before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .agent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .agent-card.active {
+            border-left: 4px solid #48bb78;
+        }
+        
+        .agent-card.idle {
+            border-left: 4px solid #cbd5e0;
+        }
+        
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .agent-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .agent-status {
+            font-size: 13px;
+            color: #718096;
+        }
+        
+        .agent-task {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 Facilita Factory</h1>
+            <p class="subtitle">Dashboard de Acompanhamento • Atualizado em 05/02/2026 às 14:53:47</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="label">Total de Tasks</div>
+                <div class="value">1</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Tasks Ativas</div>
+                <div class="value">1</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Concluídas Hoje</div>
+                <div class="value">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Agentes Ativos</div>
+                <div class="value">2/7</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('tasks')">📋 Tasks</button>
+            <button class="tab" onclick="showTab('agents')">👥 Agentes</button>
+        </div>
+        
+        <div id="tasks-tab" class="tab-content active">
+            <div class="task-grid">
+
+                <div class="task-card high" onclick="toggleDetails('TASK-001')">
+                    <div class="task-header">
+                        <div class="task-title">📝 Migração de Notificações de Audiência para WhatsApp</div>
+                        <div class="task-badges">
+                            <span class="badge status">SPEC</span>
+                            <span class="badge priority" style="background: #e67e22">HIGH</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-meta">
+                        <strong>ID:</strong> TASK-001 • <strong>Projeto:</strong> facilita-api
+                    </div>
+                    
+                    <div class="task-description">Migrar notificações de audiência de email para WhatsApp e unificar horário de notificação de confirmação de presença para 17h D-1. Inclui: (1) Confirmação de presença às 17h D-1, (2) Validação de conf...</div>
+                    
+                    <div class="task-footer">
+                        <div class="assignee">
+                            <div class="assignee-avatar">S</div>
+                            SPEC
+                        </div>
+                        <div style="font-size: 12px; color: #a0aec0;">
+                            Atualizado: 05/02/2026 14:48
+                        </div>
+                    </div>
+                    
+                    <div class="task-details" id="details-TASK-001">
+                        <div class="detail-section">
+                            <h4>⏱️ Timestamps</h4>
+                            <ul>
+                                <li><strong>Criado:</strong> 05/02/2026 13:11</li>
+                                <li><strong>Atualizado:</strong> 05/02/2026 14:48</li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4>📝 Notas</h4>
+                            <ul>
+                                <li>Tiago validou copies dos templates WhatsApp</li>
+                                <li>Grupo WhatsApp operacional: https://chat.whatsapp.com/GWTvcLDmhJnBcRItRf6yjK</li>
+                                <li>Testes de WhatsApp: avisar Tiago antes para cadastrar templates na Twilio</li>
+                                <li>Número de teste: +556181186777</li>
+                                <li>Termo 'check-in' substituído por 'checkpoint' em todo código</li>
+                                <li>mainRequestId = mainId || id em todos os templates</li>
+                                <li>Validação de confirmação às 18h D-1 (única rotina de validação)</li>
+                                <li>56 cenários de teste mapeados (incluindo validação)</li>
+                                <li>Distribuído para Spec em 2026-02-05T14:48:00.000Z</li>
+
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4>📂 Arquivos</h4>
+                            <ul>
+                                <li><strong>Spec:</strong> <code>/home/ubuntu/facilita-factory/shared/specs/spec-001.md</code></li>
+                                <li><strong>Testes:</strong> <code>/home/ubuntu/facilita-factory/shared/specs/spec-001-test-scenarios.md</code></li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div id="agents-tab" class="tab-content">
+            <div class="agents-grid">
+
+                <div class="agent-card active">
+                    <div class="agent-header">
+                        <div class="agent-avatar">P</div>
+                        <div>
+                            <div class="agent-name">Lev (PM)</div>
+                            <div class="agent-status">🟢 Ativo</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task">
+                        <strong>Trabalhando em:</strong><br>Migração de Notificações de Audiência para WhatsApp
+                    </div>
+
+                </div>
+
+                <div class="agent-card active">
+                    <div class="agent-header">
+                        <div class="agent-avatar">S</div>
+                        <div>
+                            <div class="agent-name">Spec</div>
+                            <div class="agent-status">🟢 Ativo</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task">
+                        <strong>Trabalhando em:</strong><br>Migração de Notificações de Audiência para WhatsApp
+                    </div>
+
+                </div>
+
+                <div class="agent-card idle">
+                    <div class="agent-header">
+                        <div class="agent-avatar">D</div>
+                        <div>
+                            <div class="agent-name">Dev-1</div>
+                            <div class="agent-status">⚪ Ocioso</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task" style="color: #a0aec0;">
+                        Aguardando atribuição
+                    </div>
+
+                </div>
+
+                <div class="agent-card idle">
+                    <div class="agent-header">
+                        <div class="agent-avatar">D</div>
+                        <div>
+                            <div class="agent-name">Dev-2</div>
+                            <div class="agent-status">⚪ Ocioso</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task" style="color: #a0aec0;">
+                        Aguardando atribuição
+                    </div>
+
+                </div>
+
+                <div class="agent-card idle">
+                    <div class="agent-header">
+                        <div class="agent-avatar">S</div>
+                        <div>
+                            <div class="agent-name">Support</div>
+                            <div class="agent-status">⚪ Ocioso</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task" style="color: #a0aec0;">
+                        Aguardando atribuição
+                    </div>
+
+                </div>
+
+                <div class="agent-card idle">
+                    <div class="agent-header">
+                        <div class="agent-avatar">Q</div>
+                        <div>
+                            <div class="agent-name">QA</div>
+                            <div class="agent-status">⚪ Ocioso</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task" style="color: #a0aec0;">
+                        Aguardando atribuição
+                    </div>
+
+                </div>
+
+                <div class="agent-card idle">
+                    <div class="agent-header">
+                        <div class="agent-avatar">D</div>
+                        <div>
+                            <div class="agent-name">Docs</div>
+                            <div class="agent-status">⚪ Ocioso</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-task" style="color: #a0aec0;">
+                        Aguardando atribuição
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <button class="refresh-btn" onclick="window.location.reload()">🔄 Atualizar</button>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function toggleDetails(taskId) {
+            const details = document.getElementById('details-' + taskId);
+            if (details.classList.contains('expanded')) {
+                details.classList.remove('expanded');
+            } else {
+                // Close all other details
+                document.querySelectorAll('.task-details').forEach(d => {
+                    d.classList.remove('expanded');
+                });
+                details.classList.add('expanded');
+            }
+        }
+    </script>
+</body>
+</html>
