@@ -17,7 +17,7 @@
         .header {
             background: #161b22;
             border-bottom: 1px solid #30363d;
-            padding: 12px 20px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -29,25 +29,37 @@
         }
         .header .controls {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         .btn {
             background: #238636;
             color: white;
-            border: none;
-            padding: 8px 16px;
+            border: 1px solid #2ea043;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(35, 134, 54, 0.3);
         }
-        .btn:hover { background: #2ea043; }
+        .btn:hover { 
+            background: #2ea043;
+            border-color: #3fb950;
+            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.5);
+            transform: translateY(-1px);
+        }
         .btn.secondary {
             background: #21262d;
-            border: 1px solid #30363d;
+            border: 1px solid #58a6ff;
+            color: #58a6ff;
+            box-shadow: 0 2px 8px rgba(88, 166, 255, 0.2);
         }
-        .btn.secondary:hover { background: #30363d; }
+        .btn.secondary:hover { 
+            background: #30363d;
+            border-color: #79c0ff;
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.4);
+        }
         .container {
             display: flex;
             height: calc(100vh - 60px);
@@ -70,6 +82,14 @@
             background: #0d1117;
             color: #c9d1d9;
             border: none;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+        }
+        .CodeMirror pre {
+            font-size: 14px !important;
+        }
+        .CodeMirror-line {
+            font-size: 14px !important;
         }
         .preview-pane h1, .preview-pane h2, .preview-pane h3 {
             color: #58a6ff;
