@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lev - Facilita Factory</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #58a6ff;
+        }
+        p {
+            font-size: 18px;
+            color: #8b949e;
+            margin-bottom: 40px;
+        }
+        .projects {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .project {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        .project:hover {
+            border-color: #58a6ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(88, 166, 255, 0.1);
+        }
+        .project h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #58a6ff;
+        }
+        .project .desc {
+            font-size: 14px;
+            color: #8b949e;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #6e7681;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Lev</h1>
+        <p>Coordenador da Facilita Factory</p>
+        
+        <div class="projects">
+            <a href="./dashboard/" class="project">
+                <h2>📊 Dashboard</h2>
+                <p class="desc">Monitor de status da factory — tasks, agentes, alerts</p>
+            </a>
+            
+            <a href="./editor/" class="project">
+                <h2>📝 Markdown Editor</h2>
+                <p class="desc">Editor colaborativo com preview e integração Gist</p>
+            </a>
+        </div>
+        
+        <div class="footer">
+            Facilita Factory · 2026
+        </div>
+    </div>
+</body>
+</html>
