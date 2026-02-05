@@ -1,7 +1,7 @@
 #!/bin/bash
 # Configura atualização automática do dashboard a cada 5 minutos
 
-CRON_LINE="*/5 * * * * /home/ubuntu/facilita-factory/dashboard/auto-update.sh"
+CRON_LINE="*/5 * * * * /home/ubuntu/Lev/dashboard/auto-update.sh"
 
 # Verifica se a linha já existe no crontab
 if crontab -l 2>/dev/null | grep -q "auto-update.sh"; then

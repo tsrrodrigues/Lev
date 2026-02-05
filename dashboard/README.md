@@ -4,10 +4,9 @@ Dashboard interativo em tempo real para acompanhar tasks e agentes.
 
 ## 🚀 Acesso Rápido
 
-**URL do Dashboard:** https://gist.github.com/tsrrodrigues/f5cfd1d8d567e68f55e5693710fcc549
+**URL do Dashboard:** https://tsrrodrigues.github.io/Lev/
 
-Clique em "View raw" ou acesse diretamente:
-https://gist.githubusercontent.com/tsrrodrigues/f5cfd1d8d567e68f55e5693710fcc549/raw/index.html
+*(GitHub Pages - atualizado automaticamente via GitHub Actions)*
 
 ## 📊 Funcionalidades
 
@@ -36,36 +35,36 @@ https://gist.githubusercontent.com/tsrrodrigues/f5cfd1d8d567e68f55e5693710fcc549
 
 ## 🔄 Atualizar Dashboard
 
-### Opção 1: Manual Local
+### Opção 1: Deploy Manual (Recomendado)
 ```bash
-cd /home/ubuntu/facilita-factory/dashboard
-./update.sh
+cd /home/ubuntu/Lev/dashboard
+./deploy.sh
+```
+
+Isso regenera o dashboard e faz deploy via GitHub Pages.
+
+### Opção 2: Apenas Gerar (Local)
+```bash
+cd /home/ubuntu/Lev/dashboard
+python3 generate.py
 ```
 
 Depois abra no navegador:
 ```
-file:///home/ubuntu/facilita-factory/dashboard/index.html
+file:///home/ubuntu/Lev/dashboard/index.html
 ```
-
-### Opção 2: Manual com Upload (Recomendado)
-```bash
-cd /home/ubuntu/facilita-factory/dashboard
-./update.sh --upload
-```
-
-Isso gera o HTML e faz upload para o GitHub Gist, mantendo a URL pública sempre atualizada.
 
 ### Opção 3: Automático (Cron) ⭐
 Configure atualização automática a cada 5 minutos:
 ```bash
-cd /home/ubuntu/facilita-factory/dashboard
+cd /home/ubuntu/Lev/dashboard
 ./setup-cron.sh
 ```
 
 **Benefícios:**
 - Dashboard sempre atualizado automaticamente
+- Deploy automático via GitHub Pages
 - Não precisa rodar comandos manualmente
-- URL pública sempre com dados mais recentes
 
 **Para desabilitar:**
 ```bash
