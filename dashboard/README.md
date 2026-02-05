@@ -10,6 +10,11 @@ Dashboard interativo em tempo real para acompanhar tasks e agentes.
 
 ## 📊 Funcionalidades
 
+### ⚡ Auto-Refresh
+- **Atualização automática a cada 30 segundos**
+- Sem necessidade de interação
+- Timestamp atualiza no header
+
 ### Visão Geral
 - **Total de tasks** no sistema
 - **Tasks ativas** (não concluídas)

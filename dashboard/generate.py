@@ -646,6 +646,11 @@ def generate_html(tasks, status):
                 details.classList.add('expanded');
             }
         }
+        
+        // Auto-refresh a cada 30 segundos
+        setTimeout(function() {
+            window.location.reload();
+        }, 30000);
     </script>
 </body>
 </html>
