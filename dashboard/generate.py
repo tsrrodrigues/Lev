@@ -11,7 +11,7 @@ from pathlib import Path
 
 FACTORY_ROOT = Path("/home/ubuntu/facilita-factory")
 SHARED = FACTORY_ROOT / "shared"
-DASHBOARD = FACTORY_ROOT / "dashboard"
+DASHBOARD = Path("/home/ubuntu/Lev/dashboard")
 
 def load_json(path):
     """Carrega JSON ou retorna {} se não existir"""
