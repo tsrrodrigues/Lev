@@ -344,7 +344,7 @@
     <div class="container">
         <div class="header">
             <h1>🏭 Facilita Factory</h1>
-            <p class="subtitle">Dashboard de Acompanhamento • Atualizado em 05/02/2026 às 15:02:03</p>
+            <p class="subtitle">Dashboard de Acompanhamento • Atualizado em 05/02/2026 às 15:18:43</p>
         </div>
         
         <div class="stats">
@@ -580,6 +580,11 @@
                 details.classList.add('expanded');
             }
         }
+        
+        // Auto-refresh a cada 30 segundos
+        setTimeout(function() {
+            window.location.reload();
+        }, 30000);
     </script>
 </body>
 </html>
